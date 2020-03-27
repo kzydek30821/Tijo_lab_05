@@ -3,17 +3,19 @@ package pl.edu.pwsztar.domain.mapper;
 import org.springframework.stereotype.Component;
 import pl.edu.pwsztar.domain.dto.MovieDto;
 import pl.edu.pwsztar.domain.entity.Movie;
+import pl.edu.pwsztar.service.serviceImpl.Converter;
+
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class MovieListMapper {
 
     public List<MovieDto> mapToDto(List<Movie> movies) {
-        List<MovieDto> moviesDto = new ArrayList<>();
+        Converter<Movie,MovieDto> mapConverter = (Movie movie) -> {
 
-        for(Movie movie: movies) {
             MovieDto movieDto = new MovieDto();
 
             movieDto.setMovieId(movie.getMovieId());
@@ -21,9 +23,12 @@ public class MovieListMapper {
             movieDto.setImage(movie.getImage());
             movieDto.setYear(movie.getYear());
 
-            moviesDto.add(movieDto);
-
-        }
+            return movieDto;
+        };
+        List<MovieDto> moviesDto = movies
+                .stream()
+                .map(mapConverter::convert)
+                .collect(Collectors.toList());
 
         return moviesDto;
     }

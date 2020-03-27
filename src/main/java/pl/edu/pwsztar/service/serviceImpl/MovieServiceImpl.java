@@ -49,4 +49,8 @@ public class MovieServiceImpl implements MovieService {
     public void deleteMovie(Long movieId) {
         movieRepository.deleteById(movieId);
     }
+
+    public boolean findMovieById(Long movieId){
+        return movieRepository.existsById(movieId);
+    }
 }
