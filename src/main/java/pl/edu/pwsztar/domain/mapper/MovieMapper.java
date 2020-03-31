@@ -6,17 +6,14 @@ import pl.edu.pwsztar.domain.entity.Movie;
 import pl.edu.pwsztar.service.serviceImpl.Converter;
 
 @Component
-public class MovieMapper {
+public class MovieMapper implements Converter<CreateMovieDto, Movie>{
 
-    public Movie mapToEntity(CreateMovieDto createMovieDto) {
-        Converter<CreateMovieDto,Movie> mapToEntityConverter = (CreateMovieDto) -> {
-            Movie movie = new Movie();
-
-            movie.setImage(createMovieDto.getImage());
-            movie.setTitle(createMovieDto.getTitle());
-            movie.setYear(createMovieDto.getYear());
-            return movie;
-        };
-        return mapToEntityConverter.convert(createMovieDto);
+    @Override
+    public Movie convert(CreateMovieDto from) {
+        Movie movie = new Movie();
+        movie.setImage(from.getImage());
+        movie.setTitle(from.getTitle());
+        movie.setYear(from.getYear());
+        return movie;
     }
 }

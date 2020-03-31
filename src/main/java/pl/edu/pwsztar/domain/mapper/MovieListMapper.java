@@ -5,29 +5,29 @@ import pl.edu.pwsztar.domain.dto.MovieDto;
 import pl.edu.pwsztar.domain.entity.Movie;
 import pl.edu.pwsztar.service.serviceImpl.Converter;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class MovieListMapper {
+public class MovieListMapper implements Converter<List<Movie>,List<MovieDto>>{
+    private MovieDto convertMovie(Movie from) {
 
-    public List<MovieDto> mapToDto(List<Movie> movies) {
-        Converter<Movie,MovieDto> mapConverter = (Movie movie) -> {
+        MovieDto movieDto = new MovieDto();
+        movieDto.setMovieId(from.getMovieId());
+        movieDto.setTitle(from.getTitle());
+        movieDto.setImage(from.getImage());
+        movieDto.setYear(from.getYear());
 
-            MovieDto movieDto = new MovieDto();
+        return movieDto;
+    }
 
-            movieDto.setMovieId(movie.getMovieId());
-            movieDto.setTitle(movie.getTitle());
-            movieDto.setImage(movie.getImage());
-            movieDto.setYear(movie.getYear());
+    @Override
+    public List<MovieDto> convert(List<Movie> from) {
 
-            return movieDto;
-        };
-        List<MovieDto> moviesDto = movies
+        List<MovieDto> moviesDto = from
                 .stream()
-                .map(mapConverter::convert)
+                .map(this::convertMovie)
                 .collect(Collectors.toList());
 
         return moviesDto;
